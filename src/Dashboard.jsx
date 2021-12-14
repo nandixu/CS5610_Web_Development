@@ -11,13 +11,15 @@ function Dashboard () {
 
     const username = useParams().username;
 
+    const createLink = "/dashboard/" + username + "/create"
+
     console.log(username)
 
 
     return(
         <div>
             <h2>DashBoard Page {username}</h2>
-            <Link to='/createjob'>
+            <Link to= {createLink} >
                 <div>Create New Job</div>
             </Link>
             <button onClick ={
@@ -30,6 +32,16 @@ function Dashboard () {
                     .catch(error => console.log(error));
                 }
             }>Log Out</button>
+
+            <button onClick = {
+                () => {
+                    axios.get('http://localhost:8000/api/users/auth')
+                    .then(
+                        alert("UserInfo is " + username)
+                    )
+                    .catch(error => console.log(error))
+                }
+            }>Auth</button>
         </div>
     )
 }

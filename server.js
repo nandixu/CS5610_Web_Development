@@ -18,13 +18,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 const jobsRouter = require('./routes/jobs')
-app.use('/api/jobs', jobsRouter)
+const usersRouter = require('./routes/users')
 
 app.use(cors());
 app.use(cookieParser());
-
-const usersRouter = require('./routes/users')
-app.use('/api/users', usersRouter)
 
 app.set('trust proxy', 1) // trust first proxy
 app.use(session({
@@ -38,13 +35,8 @@ app.use(session({
 //     }
 }))
 
-// app.get('/', function (req, res) {
-//     res.render('index', {});
-// });
-
-// app.get('/register', function (req, res) {
-//     res.render('Register', {});
-// });
+app.use('/api/users', usersRouter)
+app.use('/api/jobs', jobsRouter)
 
 app.use(express.static(path.join(__dirname, 'build')));
 

@@ -21,7 +21,7 @@ ReactDOM.render(
       <Route path="/register" element = {<Register />} />
       <Route path="/login" element = {<LogIn />} />
       <Route path="/dashboard/:username" element = {<Dashboard />} />
-      <Route path="/createjob" element = {<CreateJob />} />
+      <Route path="/dashboard/:username/create" element = {<CreateJob />} />
     </Routes>
   </Router>,
   document.getElementById('root')

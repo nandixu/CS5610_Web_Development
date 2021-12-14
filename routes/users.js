@@ -91,7 +91,15 @@ router.delete('/delete/:id', getUser, async function(req, res) {
     }
 })
 
-
+//Auth
+router.post('/auth', function(req, res) {
+    const ssn = req.session.username
+    if (!ssn) {
+        res.status(404).send("Session no longer exist.")
+    }else {
+        return res.send("You are reaching the auth part " + ssn)
+    }
+})
 
 
 //Log Out

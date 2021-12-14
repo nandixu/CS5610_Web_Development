@@ -24,10 +24,6 @@ const jobSchema = new mongoose.Schema({
     companywebsite: {
         type: String,
     },
-    salary: {
-        type: String,
-        require: true
-    },
 }, {
     collection: 'jobs'
 })

@@ -35,6 +35,7 @@ function LogIn () {
                     console.log("You clicked log in button!")
                     axios.post("http://localhost:8000/api/users/login", userData)
                     .then(response => {
+                        
                         console.log(response)
                         console.log("You logged in!")
                         alert("You logged in! " + response.data.username)
