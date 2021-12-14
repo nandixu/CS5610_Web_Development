@@ -1,0 +1,33 @@
+.navbar {
+    display:flex;
+    height: 4em;
+    padding: 0 1em;
+    background-color: lightblue;
+}
+
+.jobboardtitle  {
+    margin-top: 0.5em;
+    text-align: center;
+    font-family: 'Oswald', Helvetica, sans-serif;
+    font-size: 30px;
+    transform: skewY(-3deg);
+    letter-spacing: 4px;
+    word-spacing: -8px;
+    color: lightseagreen;
+    text-decoration: none;
+}
+
+a.button2 {
+    display: inline-block;
+    padding: 0.5em 3em;
+    border: 0.16em solid #FFFFFF;
+    margin: 0.6em 0.3em 0.3em 0;
+    box-sizing: border-box;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    color:#FFFFFF;
+    text-align:center;
+    transition: all 0.15s;
+}
