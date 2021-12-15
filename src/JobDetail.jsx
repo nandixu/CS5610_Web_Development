@@ -1,15 +1,20 @@
 import { useParams } from 'react-router';
 import React, { useEffect, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux'
 import axios from 'axios';
 import { useNavigate } from 'react-router';
 import './style.css'
 
 
 function JobDetail() {
+    const dispatch = useDispatch()
+    const isLoggedIn = useSelector(state => state.LogInState)
+    const username = useSelector(state => state.UserNameState)
+
     const jobTitle = useParams().jobtitle
     const navigate = useNavigate()
     const [addFavData, setAddFavData] = useState({
-        username: "",
+        username: username,
         jobtitle: jobTitle
     })
 
@@ -30,13 +35,40 @@ function JobDetail() {
     function addFavorite() {
         setAddFavData({
             ...addFavData,
-            username: "nandi1"
+            username: username
         })
         axios.post("http://localhost:8000/api/users/addfav", addFavData)
             .then(response => {
                 alert("Favorite Job Added.")
             })
             .catch(error => console.log(error))
+    }
+
+    const [sectionCompo, setSectionCompo] = useState(
+        <div>
+        </div>
+    )
+
+    useEffect( () => {
+        changesection()
+    }, [isLoggedIn])
+
+    function changesection () {
+        if (isLoggedIn) {
+            setSectionCompo(
+            <div>
+                <a className="button3" onClick={
+                () => {
+                    addFavorite()
+                }
+            }>Add to Favorite</a>
+            </div>)
+
+        }else{
+            setSectionCompo(
+            <div>
+            </div>)
+        }
     }
 
     const jobComponent = job ? 
@@ -72,11 +104,9 @@ function JobDetail() {
                     navigate(-1)
                 }
             }>Back</a>
-            <a className="button3" onClick={
-                () => {
-                    addFavorite()
-                }
-            }>Add to Favorite</a>
+            <div>
+                {sectionCompo}
+            </div>
         </div>
     )
 }

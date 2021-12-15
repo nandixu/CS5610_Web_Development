@@ -72,18 +72,20 @@ function CreateJob() {
 
             <a className="button3" onClick = {
                     () => {
-                        axios.post('http://localhost:8000/api/jobs/create', jobData)
+                        axios.post('/api/jobs/create', jobData)
                         .then(response => {
                             console.log(response.message)
 
                             console.log("New Job Created")
                             alert("New Job Created")
-                            navigate("/dashboard/" + username)
+                            navigate('/jobs/findexact/' + jobData.jobtitle)
                         })
                         .catch(error => {
                             console.log(error.response.data.message)
                             alert(error.response.data.message)
                         });
+
+                        
                     }
                 }>Submit</a>
 

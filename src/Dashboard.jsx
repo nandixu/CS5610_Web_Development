@@ -3,9 +3,13 @@ import axios from 'axios';
 import { useNavigate } from 'react-router';
 import { Link } from 'react-router-dom';
 import { useParams } from 'react-router';
+import { useDispatch } from 'react-redux'
+import { Change } from './action';
 import './style.css';
 
 function Dashboard () {
+
+    const dispatch = useDispatch();
 
     const navigate = useNavigate();
 
@@ -53,6 +57,7 @@ function Dashboard () {
                     axios.get('http://localhost:8000/api/users/logout')
                     .then(response => {
                         alert('You logged out!')
+                        dispatch(Change())
                         navigate('/')
                     })
                     .catch(error => console.log(error));

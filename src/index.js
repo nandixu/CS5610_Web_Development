@@ -14,8 +14,16 @@ import CreateJob from "./CreateJob";
 import JobDetail from "./JobDetail";
 import reportWebVitals from './reportWebVitals';
 
+import { createStore } from 'redux';
+import { Provider, useSelector } from 'react-redux'
+import { Change } from './action'
+import allReducers from './reducers';
+
+const store = createStore(allReducers);
+
 ReactDOM.render(
-  <Router>
+  <Provider store={store}>
+    <Router>
     <NavBar />
     <Routes>
       <Route exact path="/" element = {<Home />} />
@@ -25,7 +33,8 @@ ReactDOM.render(
       <Route path="/dashboard/:username/create" element = {<CreateJob />} />
       <Route path="/jobs/findexact/:jobtitle" element = {<JobDetail />} />
     </Routes>
-  </Router>,
+  </Router>
+  </Provider>,
   document.getElementById('root')
 );
 

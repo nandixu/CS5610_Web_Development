@@ -1,8 +1,14 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router';
+import { useDispatch, useSelector } from 'react-redux'
+import { Change, SaveUserName } from './action';
 
 function LogIn () {
+
+    let userNameState = useSelector(state => state.userNameState)
+
+    const dispatch = useDispatch();
 
     const navigate = useNavigate();
 
@@ -10,6 +16,7 @@ function LogIn () {
         password: '',
         username: '',
     })
+    
 
     return(
         <div>
@@ -33,12 +40,15 @@ function LogIn () {
             <button onClick = {
                 () => {
                     console.log("You clicked log in button!")
-                    axios.post("http://localhost:8000/api/users/login", userData)
+                    axios.post("/api/users/login", userData)
                     .then(response => {
                         
                         console.log(response)
                         console.log("You logged in!")
                         alert("You logged in! " + response.data.username)
+                        dispatch(Change())
+                        dispatch(SaveUserName(response.data.username))
+                        console.log("UserNameState is :" + userNameState)
                         navigate('/dashboard/' + response.data.username)
                     })
                     .catch(error => {
@@ -48,6 +58,7 @@ function LogIn () {
                 }
             }
                 >Log In</button>
+                
         </div>
     )
 }
