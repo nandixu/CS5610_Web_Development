@@ -1,30 +1,88 @@
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios, { Axios } from 'axios';
+import { Link } from 'react-router-dom';
+import "./style.css"
 
 export default function () {
     const [formInput, setFormInput] = useState('');
     const [jobFound, setJobFound] = useState({
-        name: 'No job Found',
-        salary: 0,
+        jobtitle: 'No job Found',
+        companyname: '',
+        location: '',
+        description: '',
+        employeremailcontact: '',
+        companywebsite: '',
     })
     const [errorMsg, setErrorMsg] = useState(null);
 
+    const [allJobs, setAllJobs] = useState([]);
+    const [foundJobs, setFoundJobs] = useState([]);
+
+    // function findAllJobs(){
+    //     axios.get("http://localhost:8000/api/jobs/findall")
+    //         .then(response => {
+    //             setAllJobs(response.data)
+    //         })
+    //         .catch(error => console.error(error));
+    // }
+
+    // useEffect(findAllJobs, [])
+
+    // const jobListComponent = allJobs.map(job => {
+    //     return (
+    //         <div>
+    //             <Link to={"/jobs/find/" + job.jobtitle}>{job.jobtitle}</Link>
+    //         </div>
+    //     )
+    // })
+
+    function findJobs(){
+        if (!formInput) {
+            setErrorMsg("You must type in a single word text.")
+            return;
+        }
+        axios.get("http://localhost:8000/api/jobs/find/" + formInput)
+        .then(response => {
+            console.log(response.data)
+            setFoundJobs(response.data)
+        })
+        .catch(error => console.error(error));
+    }
+
+    const jobListComponent = foundJobs.map(job => {
+        return (
+            <div>
+                <Link to={"/jobs/findexact/" + job.jobtitle}>{job.jobtitle}</Link>
+            </div>
+        )
+    })
+
     function onSearchButtionClick() {
 
-        // if (!formInput) {
-        //     setErrorMsg("You must type in a single word text.")
-        //     return;
-        // }
+        if (!formInput) {
+            setErrorMsg("You must type in a single word text.")
+            return;
+        }
 
-        axios.get('/api/jobs')
-        .then(response => setJobFound(response.data))
+        axios.get('/api/jobs/search/' + formInput)
+        .then(response => {
+            console.log(allJobs)
+        })
         .catch(error => setJobFound({
-            name: "No Job Found",
-            salary: 0,
+            jobtitle: 'No job Found',
+            companyname: '',
+            location: '',
+            description: '',
+            employeremailcontact: '',
+            companywebsite: '',
         }))
 
         console.log("You clicked search bar button.")
     }
+
+    // function clickTest() {
+    //     console.log("You clicked search bar button.")
+    // }
 
     return (
         <div>
@@ -32,15 +90,11 @@ export default function () {
             onChange = {(e) => {
                 setErrorMsg(null)
                 setFormInput(e.target.value)
-            }} />
-            <button onClick={onSearchButtionClick}>
-                Search
-            </button>
+            }} ></input>
+            <button onClick={findJobs}>Search</button>
             <div>
-                Found Job Name: {jobFound.name}
-            </div>
-            <div>
-                Found Job Salary: {jobFound.salary}
+                <h3>Search Results:</h3>
+                {jobListComponent}
             </div>
         </div>
     )

@@ -2,6 +2,20 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 const router = express.Router();
 const User = require("../models/user");
+const Job = require("../models/job")
+const authentication = require('./auth.js')
+
+// const authentication = (req, res, next) => {
+//     console.log(req.session)
+//     console.log("Authenticating the action, current session.username is " + req.session.username)
+//     const username = req.session.username
+//     if (!username) {
+//         res.status(401).send('Unauthorized: No session available');
+//     }else {
+//         req.username = username;
+//         next();
+//     }
+// }
 
 //Return all users
 router.get('/', async (req, res) => {
@@ -64,6 +78,7 @@ router.post('/login', async function (req, res){
     const user = await User.findOne({username})
     if (!user) {
         return res.status(404).send({message: "Username does not exist."})
+        // return res.status(404).send({message: "Username does not exist."})
     }
 
     const isMatch = await bcrypt.compare(password, user.password)
@@ -74,11 +89,97 @@ router.post('/login', async function (req, res){
     console.log("Username and password match, I am logging you in.")
     
     req.session.username = username
+    console.log("Hello, " + req.session.username)
 
     return res.status(200).send(user)
 })
 
 
+
+
+
+//Get favorites
+router.get('/:username/findfav', authentication, async (req, res) => {
+    const username = req.params.username
+    console.log("hello: " + req.params.username)
+    const user = await User.findOne({"username": username}).exec()
+    if (!user) {
+        return res.status(404).send("User Not Found")
+    }
+
+    return res.status(200).send(user.favorite)
+})
+
+//Add job as favorite
+router.post('/addfav', async (req, res) => {
+    const {username, jobtitle} = req.body
+
+    const job = await Job.findOne({"jobtitle": jobtitle}).exec()
+    if (!job) {
+        console.log("Job Not Found")
+        return res.status(404).send("Job Not Found")
+    }
+
+    const user = await User.findOne({"username": username}).exec()
+    if (!user) {
+        console.log("User Not Found")
+        return res.status(404).send("User Not Found")
+    }
+
+    console.log(user.favorite)
+    const newfav = user.favorite.push(job.jobtitle)
+    console.log(user.favorite)
+
+
+    return User.updateOne({username: username},
+        {
+            $set:
+                {favorite: user.favorite}
+        })
+        .then(response => {
+            return res.status(200).send("Successfully updated")
+        })
+        .catch(error => res.status(422).send(error))
+})
+
+//Delete favorite job
+router.post('/deletefav', async (req, res) => {
+    const {username, jobtitle} = req.body
+
+    const job = await Job.findOne({"jobtitle": jobtitle}).exec()
+    if (!job) {
+        return res.status(404).send("Job Not Found")
+    }
+
+    const user = await User.findOne({"username": username}).exec()
+    if (!user) {
+        return res.status(404).send("User Not Found")
+    }
+
+    console.log(user.favorite)
+    let index = user.favorite.indexOf(jobtitle)
+    if (index !== -1) {
+        user.favorite.splice(index, 1)
+    }
+    console.log(user.favorite)
+
+
+    return User.updateOne({username: username},
+        {
+            $set:
+                {favorite: user.favorite}
+        })
+        .then(response => {
+            return res.status(200).send("Successfully deleted")
+        })
+        .catch(error => res.status(422).send(error))
+})
+
+//Auth
+router.get('/auth', function(req, res) {
+    console.log("You passed auth middleware")
+    return res.status(200).send("Authorized")
+}) 
 
 
 //Delete one by userid
@@ -88,16 +189,6 @@ router.delete('/delete/:id', getUser, async function(req, res) {
         res.json({ message: "Deleted!" })
     }catch(err){
         res.status(500).json({ message: err.messgae })
-    }
-})
-
-//Auth
-router.post('/auth', function(req, res) {
-    const ssn = req.session.username
-    if (!ssn) {
-        res.status(404).send("Session no longer exist.")
-    }else {
-        return res.send("You are reaching the auth part " + ssn)
     }
 })
 
@@ -123,4 +214,4 @@ async function getUser(req, res, next) {
     next()
 }
 
-module.exports = router
+module.exports = router;

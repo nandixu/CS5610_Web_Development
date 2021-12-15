@@ -11,6 +11,7 @@ import Register from "./Register";
 import LogIn from "./LogIn";
 import Dashboard from "./Dashboard";
 import CreateJob from "./CreateJob";
+import JobDetail from "./JobDetail";
 import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
@@ -22,6 +23,7 @@ ReactDOM.render(
       <Route path="/login" element = {<LogIn />} />
       <Route path="/dashboard/:username" element = {<Dashboard />} />
       <Route path="/dashboard/:username/create" element = {<CreateJob />} />
+      <Route path="/jobs/findexact/:jobtitle" element = {<JobDetail />} />
     </Routes>
   </Router>,
   document.getElementById('root')

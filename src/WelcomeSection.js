@@ -1,7 +1,7 @@
 export default function () {
     return(
         <div>
-            Welcome to JobBoard!
+            <h3>Welcome to JobBoard!</h3>
         </div>
     )
 }

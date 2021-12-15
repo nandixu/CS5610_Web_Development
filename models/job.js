@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
 const jobSchema = new mongoose.Schema({
-    name: {
+    jobtitle: {
         type: String,
         require: true
     },
@@ -23,6 +23,10 @@ const jobSchema = new mongoose.Schema({
     },
     companywebsite: {
         type: String,
+    },
+    posteddate: {
+        type: Date,
+        default: Date.now()
     },
 }, {
     collection: 'jobs'

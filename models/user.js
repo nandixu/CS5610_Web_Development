@@ -10,6 +10,10 @@ const userSchema = new mongoose.Schema({
         type: String,
         require: true
     },
+    favorite: {
+        type: Array,
+    },
+
 }, {
     collection: 'users'
 })
