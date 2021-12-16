@@ -28,6 +28,9 @@ const jobSchema = new mongoose.Schema({
         type: Date,
         default: Date.now()
     },
+    creator: {
+        type: String,
+    }
 }, {
     collection: 'jobs'
 })

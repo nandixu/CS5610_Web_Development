@@ -30,7 +30,7 @@ function LogIn () {
                 })
             }}/>
             <h5>Password:</h5>
-            <input value={userData.password} onChange={(e) => {
+            <input type="password" name="password" value={userData.password} onChange={(e) => {
                 const password = e.target.value;
                 setUserData({
                     ...userData,

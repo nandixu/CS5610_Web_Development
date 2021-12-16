@@ -34,7 +34,7 @@ function Register (props){
             <button
                 onClick = {
                     () => {
-                        axios.post('http://localhost:8000/api/users/register', userData)
+                        axios.post('/api/users/register', userData)
                         .then(response => {
                             console.log(response.message)
 

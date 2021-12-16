@@ -101,18 +101,6 @@ export default function () {
                 {sectionCompo}
             </div>
 
-            <button onClick = {showUserName}>
-                Show
-            </button>
-
-            <button onClick = {changeGlobal}>
-                change global state
-            </button>
-
-            <div>
-                {tokenCompo}
-            </div>
-
 
         </div>
     )

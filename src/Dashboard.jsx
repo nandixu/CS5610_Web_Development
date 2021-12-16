@@ -31,7 +31,7 @@ function Dashboard () {
     // useEffect(checkAuth(), [])
 
     function showFavorites() {
-        axios.get("http://localhost:8000/api/users/" + username + "/findfav")
+        axios.get("/api/users/" + username + "/findfav")
             .then(response => {
                 setFavorites(response.data)
             })
@@ -54,7 +54,7 @@ function Dashboard () {
             </Link>
             <a className="button3" onClick ={
                 () => {
-                    axios.get('http://localhost:8000/api/users/logout')
+                    axios.get('/api/users/logout')
                     .then(response => {
                         alert('You logged out!')
                         dispatch(Change())

@@ -7,7 +7,6 @@ import './style.css'
 
 
 function JobDetail() {
-    const dispatch = useDispatch()
     const isLoggedIn = useSelector(state => state.LogInState)
     const username = useSelector(state => state.UserNameState)
 
@@ -17,6 +16,9 @@ function JobDetail() {
         username: username,
         jobtitle: jobTitle
     })
+    const [deleteJobData, setDeleteJobData] = useState({
+        jobtitle: jobTitle
+    })
 
     console.log("jobtitle: " + jobTitle)
 
@@ -24,9 +26,8 @@ function JobDetail() {
     useEffect(findJobDetail, [])
 
     function findJobDetail() {
-        axios.get("http://localhost:8000/api/jobs/findexact/" + jobTitle)
+        axios.get("/api/jobs/findexact/" + jobTitle)
             .then(response => {
-                console.log("resposne:" + response.data)
                 setJob(response.data)
             })
             .catch(error => console.log("Could not find that Job"));
@@ -37,11 +38,22 @@ function JobDetail() {
             ...addFavData,
             username: username
         })
-        axios.post("http://localhost:8000/api/users/addfav", addFavData)
+        axios.post("/api/users/addfav", addFavData)
             .then(response => {
                 alert("Favorite Job Added.")
             })
             .catch(error => console.log(error))
+    }
+
+    function deleteJob() {
+        setDeleteJobData({
+            jobtitle: jobTitle
+        })
+        axios.delete("/api/jobs/delete", deleteJobData)
+        .then(response => {
+            alert("Job Deleted.")
+        })
+        .catch(error => console.log(error))
     }
 
     const [sectionCompo, setSectionCompo] = useState(
@@ -55,14 +67,34 @@ function JobDetail() {
 
     function changesection () {
         if (isLoggedIn) {
-            setSectionCompo(
-            <div>
-                <a className="button3" onClick={
-                () => {
-                    addFavorite()
-                }
-            }>Add to Favorite</a>
-            </div>)
+            if (job.creator == username) {
+                setSectionCompo(
+                    <div>
+                        <div>
+                        <a className="button3" onClick={
+                            () => {
+                                addFavorite()
+                            }
+                        }>Add to Favorite</a>
+
+                        <a className="button3" onClick={
+                            () => {
+                                deleteJob()
+                                navigate('/')
+                            }
+                        }>Delete the Job</a>
+                        </div>
+                    </div>)
+            }else {
+                setSectionCompo(
+                    <div>
+                        <a className="button3" onClick={
+                        () => {
+                            addFavorite()
+                        }
+                    }>Add to Favorite</a>
+                    </div>)
+            }
 
         }else{
             setSectionCompo(
@@ -92,6 +124,9 @@ function JobDetail() {
     </div>
     <div>
         Posted Date: {job.posteddate} 
+    </div>
+    <div>
+        Creator: {job.creator} 
     </div></>) :
     (<div> No Job found </div>);
 

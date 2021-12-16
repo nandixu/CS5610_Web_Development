@@ -1,6 +1,6 @@
 const express = require('express');
-const bcrypt = require('bcrypt');
 const router = express.Router();
+const bcrypt = require('bcrypt');
 const User = require("../models/user");
 const Job = require("../models/job")
 const authentication = require('./auth.js')
@@ -111,7 +111,7 @@ router.get('/:username/findfav', authentication, async (req, res) => {
 })
 
 //Add job as favorite
-router.post('/addfav', async (req, res) => {
+router.post('/addfav', authentication, async (req, res) => {
     const {username, jobtitle} = req.body
 
     const job = await Job.findOne({"jobtitle": jobtitle}).exec()
@@ -143,7 +143,7 @@ router.post('/addfav', async (req, res) => {
 })
 
 //Delete favorite job
-router.post('/deletefav', async (req, res) => {
+router.post('/deletefav', authentication, async (req, res) => {
     const {username, jobtitle} = req.body
 
     const job = await Job.findOne({"jobtitle": jobtitle}).exec()

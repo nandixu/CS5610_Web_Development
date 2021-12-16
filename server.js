@@ -14,26 +14,26 @@ const db = mongoose.connection
 db.on('error', (error) => console.error(error))
 db.once('open', () => console.log('Connected to Database'))
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
 const jobsRouter = require('./routes/jobs')
 const usersRouter = require('./routes/users')
 
-app.use(cors());
-app.use(cookieParser());
-
 app.set('trust proxy', 1) // trust first proxy
 app.use(session({
+  resave: true,
+  saveUninitialized: true,
   secret: 'keyboard cat',
-  // resave: false,
-  // saveUninitialized: true,
   store: MongoStore.create({ mongoUrl: mongoString }),
 //   cookie: { 
 //       maxAge: 1000 * 60,
 //       secure: true 
 //     }
 }))
+
+app.use(cors());
+app.use(cookieParser());
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.use('/api/users', usersRouter)
 app.use('/api/jobs', jobsRouter)

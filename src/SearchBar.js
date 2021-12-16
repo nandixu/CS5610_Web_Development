@@ -41,7 +41,7 @@ export default function () {
             setErrorMsg("You must type in a single word text.")
             return;
         }
-        axios.get("http://localhost:8000/api/jobs/find/" + formInput)
+        axios.get("/api/jobs/find/" + formInput)
         .then(response => {
             console.log(response.data)
             setFoundJobs(response.data)
