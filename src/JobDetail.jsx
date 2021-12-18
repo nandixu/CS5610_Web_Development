@@ -20,8 +20,6 @@ function JobDetail() {
         jobtitle: jobTitle
     })
 
-    console.log("jobtitle: " + jobTitle)
-
     const [job, setJob] = useState("default")
     useEffect(findJobDetail, [])
 
@@ -29,8 +27,10 @@ function JobDetail() {
         axios.get("/api/jobs/findexact/" + jobTitle)
             .then(response => {
                 setJob(response.data)
+                console.log(response.data.creator)
             })
             .catch(error => console.log("Could not find that Job"));
+
     }
 
     function addFavorite() {
