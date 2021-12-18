@@ -19,6 +19,9 @@ function JobDetail() {
     const [deleteJobData, setDeleteJobData] = useState({
         jobtitle: jobTitle
     })
+    const [editJobData, setEditJobData] = useState({
+        jobtitle: jobTitle
+    })
 
     const [job, setJob] = useState("default")
     useEffect(findJobDetail, [])
@@ -43,6 +46,18 @@ function JobDetail() {
                 alert("Favorite Job Added.")
             })
             .catch(error => console.log(error))
+    }
+
+    function editJob() {
+        setEditJobData({
+            jobtitle: jobTitle
+        })
+        
+        axios.post("/api/jobs/create", editJobData)
+        .then(response => {
+            alert("Job Edited.")
+        })
+        .catch(error => console.log(error))
     }
 
     function deleteJob() {
@@ -93,6 +108,18 @@ function JobDetail() {
                             addFavorite()
                         }
                     }>Add to Favorite</a>
+                    <a className="button3" onClick={
+                            () => {
+                                deleteJob()
+                                navigate('/')
+                            }
+                        }>Delete the Job</a>
+                        <a className="button3" onClick={
+                            () => {
+                                editJob()
+                                navigate('/')
+                            }
+                        }>Edit the Job</a>
                     </div>)
             }
 

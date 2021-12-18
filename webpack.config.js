@@ -9,8 +9,7 @@ module.exports = {
 
   devServer: {
     compress: true,
-    disableHostCheck: true,   // That solved it
-
- }  
+    public: 'store-client-nestroia1.c9users.io'
+  }
 };
 

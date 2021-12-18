@@ -52,7 +52,7 @@ export default function () {
     const jobListComponent = foundJobs.map(job => {
         return (
             <div>
-                <Link to={"/jobs/findexact/" + job.jobtitle}>{job.jobtitle}</Link>
+                <Link className='searchResult' to={"/jobs/findexact/" + job.jobtitle}>{job.jobtitle}</Link>
             </div>
         )
     })
